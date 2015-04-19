@@ -1,5 +1,8 @@
 package pl.agh.sr.rmi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -10,7 +13,7 @@ import java.util.Set;
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
 public class AppImpl implements App {
-
+    private final static Logger log = LoggerFactory.getLogger(AppImpl.class);
     private static final String RMI_REGISTRY_ADDRESS = "rmi://127.0.0.1:1099";
     private static final String BOARD_REMOTE_OBJECT_NAME = "board";
 
@@ -23,8 +26,7 @@ public class AppImpl implements App {
 
     @Override
     public Room createNewRoom() throws RemoteException {
-//        logger... todo
-        System.out.println("Creating new room...");
+        log.debug("Creating new room...");
 
         BoardImpl board = new BoardImpl();
         RoomId roomId = new RoomId();
@@ -40,7 +42,7 @@ public class AppImpl implements App {
             e.printStackTrace();
         }
 
-        System.out.printf("New room created at %s", boardRmiAddress);
+        log.debug("New room created at {}.", boardRmiAddress);
         return newRoom;
     }
 

@@ -20,11 +20,11 @@ public class TicTacToeClient {
 /*
             1. Look for remote reference (in RMI Registry)
 */
-            IBoard board = (IBoard) Naming.lookup(RMI_REGISTRY_ADDRESS + "/" + BOARD_REMOTE_OBJECT_NAME);
+//            IBoard board = (IBoard) Naming.lookup(RMI_REGISTRY_ADDRESS + "/" + BOARD_REMOTE_OBJECT_NAME);
 /*
             2. Call remote method
 */
-            System.out.println(board.sayHello());
+//            System.out.println(board.sayHello());
 
 //            ------------------------------
 
