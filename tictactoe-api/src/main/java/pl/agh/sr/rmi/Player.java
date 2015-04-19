@@ -3,7 +3,7 @@ package pl.agh.sr.rmi;
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
-public class Player {
+public abstract class Player {
     private final String nickName;
 
     public Player(String nickName) {

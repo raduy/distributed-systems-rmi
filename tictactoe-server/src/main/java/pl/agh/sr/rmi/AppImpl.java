@@ -8,6 +8,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
@@ -43,6 +44,16 @@ public class AppImpl implements App {
         }
 
         log.debug("New room created at {}.", boardRmiAddress);
+        return newRoom;
+    }
+
+    @Override
+    public Room createNewBotRoom() throws RemoteException {
+        Room newRoom = createNewRoom();
+
+        Bot bot = new Bot(UUID.randomUUID().toString());
+        newRoom.addPlayer(bot);
+
         return newRoom;
     }
 

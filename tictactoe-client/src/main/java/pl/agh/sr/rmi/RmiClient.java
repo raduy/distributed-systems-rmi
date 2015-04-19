@@ -19,8 +19,33 @@ public class RmiClient {
     private static final String ROOM = "room";
     private static final String APP = "app";
 
+    private App app;
+    private TicTacToeApp ticTacToeApp;
 
-    public static App connectToServer() throws NotBoundException, MalformedURLException, RemoteException {
+    public RmiClient(TicTacToeApp ticTacToeApp) {
+        this.ticTacToeApp = ticTacToeApp;
+        try {
+            this.app = connectToServer();
+        } catch (Exception e) {
+            log.error("Error connecting to server", e);
+        }
+    }
+
+    public App getApp() {
+        return app;
+    }
+
+    public IBoard createNewRoom() throws RemoteException, NotBoundException, MalformedURLException {
+        Room newRoom = app.createNewRoom();
+        return loadBoard(newRoom);
+    }
+
+    public IBoard createNewBotRoom() throws RemoteException, NotBoundException, MalformedURLException {
+        Room newRoom = app.createNewBotRoom();
+        return loadBoard(newRoom);
+    }
+
+    private App connectToServer() throws NotBoundException, MalformedURLException, RemoteException {
         return (App) Naming.lookup(RMI_REGISTRY_ADDRESS + "/" + APP);
     }
 

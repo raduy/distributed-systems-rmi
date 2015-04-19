@@ -16,10 +16,18 @@ public interface App extends Remote {
     Set<Room> listRooms() throws RemoteException;
 
     /**
+     * Creates new room for real players.
      * @return Newly created room.
      * @throws RemoteException
      */
     Room createNewRoom() throws RemoteException;
+
+    /**
+     * Creates new room for a game with bot.
+     * @return Newly created room.
+     * @throws RemoteException
+     */
+    Room createNewBotRoom() throws RemoteException;
 
     /**
      * @param roomId id of existing room.

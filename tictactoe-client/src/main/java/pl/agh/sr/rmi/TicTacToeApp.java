@@ -3,9 +3,6 @@ package pl.agh.sr.rmi;
 import pl.agh.sr.rmi.command.CommandRouter;
 import pl.agh.sr.rmi.command.ICommand;
 
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.Scanner;
 
 /**
@@ -15,7 +12,6 @@ public class TicTacToeApp {
 
     private final Scanner scanner = new Scanner(System.in);
     private IBoard currentBoard;
-    private App app;
     private CommandRouter commandRouter;
     private RmiClient rmiClient;
 
@@ -43,10 +39,8 @@ public class TicTacToeApp {
 
             printInvitation();
 
-            this.rmiClient = new RmiClient();
-            this.app = RmiClient.connectToServer();
-
-            this.commandRouter = new CommandRouter(this);
+            this.rmiClient = new RmiClient(this);
+            this.commandRouter = new CommandRouter(this, rmiClient);
 
             CommandRouter.printAvailableCommands();
             commandMode();
@@ -57,9 +51,9 @@ public class TicTacToeApp {
         }
     }
 
-    public void createNewRoom() throws RemoteException, NotBoundException, MalformedURLException {
-        Room newRoom = app.createNewRoom();
-        this.currentBoard = rmiClient.loadBoard(newRoom);
+
+    public void updateCurrentBoard(IBoard newBoard) {
+        this.currentBoard = newBoard;
     }
 
     public void commandMode() {

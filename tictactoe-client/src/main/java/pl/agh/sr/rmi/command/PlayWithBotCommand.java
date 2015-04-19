@@ -9,22 +9,23 @@ import pl.agh.sr.rmi.TicTacToeApp;
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
-public class CreateNewRoomCommand implements ICommand {
-    public static final String INVOCATION_PREFIX = "-c";
-    public static final String DESCRIPTION = "Creates a new room";
-    private static final Logger log = LoggerFactory.getLogger(CreateNewRoomCommand.class);
-    private final TicTacToeApp app;
+public class PlayWithBotCommand implements ICommand {
+    private static final Logger log = LoggerFactory.getLogger(PlayWithBotCommand.class);
+
+    public static final String INVOCATION_PREFIX = "-b";
+    public static final String DESCRIPTION = "Creates a new room with bot";
+    private TicTacToeApp app;
     private final RmiClient rmiClient;
 
-    public CreateNewRoomCommand(TicTacToeApp app, RmiClient client) {
+    public PlayWithBotCommand(TicTacToeApp app, RmiClient rmiClient) {
         this.app = app;
-        this.rmiClient = client;
+        this.rmiClient = rmiClient;
     }
 
     @Override
     public void execute() {
         try {
-            IBoard newRoom = rmiClient.createNewRoom();
+            IBoard newRoom = rmiClient.createNewBotRoom();
             app.updateCurrentBoard(newRoom);
             app.gameMode();
         } catch (Exception e) {
