@@ -9,4 +9,6 @@ import java.rmi.RemoteException;
 public interface IBoard extends Remote {
 
     String sayHello() throws RemoteException;
+
+    String show() throws RemoteException;
 }

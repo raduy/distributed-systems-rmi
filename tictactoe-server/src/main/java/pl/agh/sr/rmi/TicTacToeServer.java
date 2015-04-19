@@ -23,6 +23,7 @@ public class TicTacToeServer {
             1. Create remote object
 */
             IBoard board = new BoardImpl();
+            AppImpl app = new AppImpl();
 
 /*
             2. Export remote object, so that:
@@ -30,6 +31,7 @@ public class TicTacToeServer {
             - after this step everybody who has reference can call methods on this object
 */
             IBoard stub = (IBoard) UnicastRemoteObject.exportObject(board, 0);
+            App appStub = (App) UnicastRemoteObject.exportObject(app, 0);
 
 /*
             3. Now we have a reference to object, and we want to publish it so that clients could access it
@@ -49,6 +51,7 @@ public class TicTacToeServer {
             "rmi://127.0.0.1:1099/board"
 */
             Naming.rebind(RMI_REGISTRY_ADDRESS + "/" + BOARD_REMOTE_OBJECT_NAME, stub);
+            Naming.rebind(RMI_REGISTRY_ADDRESS + "/app", appStub);
 
 /*
             5. Now clients can access our remote object in RMI Registry and start using it
