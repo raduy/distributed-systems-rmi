@@ -2,13 +2,13 @@ package pl.agh.sr.rmi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.agh.sr.rmi.room.RoomImpl;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
@@ -21,17 +21,19 @@ public class AppImpl implements App {
     private final RoomsRepository roomsRepository = new RoomsRepository();
 
     @Override
-    public Set<Room> listRooms() throws RemoteException {
+    public Set<IRoom> listRooms() throws RemoteException {
         return roomsRepository.immutableView();
     }
 
     @Override
-    public Room createNewRoom() throws RemoteException {
+    public IRoom createNewRoom(RealPlayer player) throws RemoteException {
         log.debug("Creating new room...");
 
         BoardImpl board = new BoardImpl();
         RoomId roomId = new RoomId();
-        Room newRoom = new Room(board, roomId);
+        IRoom newRoom = new RoomImpl(board, roomId);
+
+        newRoom.addPlayer(player);
         roomsRepository.addRoom(newRoom);
 
         IBoard stub = (IBoard) UnicastRemoteObject.exportObject(board, 0);
@@ -44,21 +46,24 @@ public class AppImpl implements App {
         }
 
         log.debug("New room created at {}.", boardRmiAddress);
+        return (IRoom) UnicastRemoteObject.exportObject(newRoom, 0);
+    }
+
+    @Override
+    public IRoom createNewBotRoom(RealPlayer player) throws RemoteException {
+        IRoom newRoom = createNewRoom(player);
+
+//        Bot bot = new Bot(UUID.randomUUID().toString());
+//        newRoom.addPlayer(bot);
+
         return newRoom;
     }
 
     @Override
-    public Room createNewBotRoom() throws RemoteException {
-        Room newRoom = createNewRoom();
+    public void joinRoom(RoomId roomId, RealPlayer player) throws RemoteException {
+        IRoom room = roomsRepository.load(roomId);
+        room.addPlayer(player);
 
-        Bot bot = new Bot(UUID.randomUUID().toString());
-        newRoom.addPlayer(bot);
-
-        return newRoom;
-    }
-
-    @Override
-    public void joinRoom(RoomId roomId) throws RemoteException {
-        throw new UnsupportedOperationException("Not implemented yet");
+        log.debug("User {} added to {} room", player.getNickName(), roomId.toString());
     }
 }

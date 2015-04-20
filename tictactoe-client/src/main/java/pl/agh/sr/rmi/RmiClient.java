@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
@@ -23,6 +24,13 @@ public class RmiClient {
     private TicTacToeApp ticTacToeApp;
 
     public RmiClient(TicTacToeApp ticTacToeApp) {
+        System.setProperty("java.security.policy",
+                "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/src/main/resources/client.policy");
+
+        if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+
         this.ticTacToeApp = ticTacToeApp;
         try {
             this.app = connectToServer();
@@ -35,23 +43,22 @@ public class RmiClient {
         return app;
     }
 
-    public IBoard createNewRoom() throws RemoteException, NotBoundException, MalformedURLException {
-        Room newRoom = app.createNewRoom();
-        return loadBoard(newRoom);
+    public IRoom createNewRoom(RealPlayer player) throws RemoteException, NotBoundException, MalformedURLException {
+        RealPlayer stub = (RealPlayer) UnicastRemoteObject.exportObject(player, 0);
+        return app.createNewRoom(stub);
     }
 
-    public IBoard createNewBotRoom() throws RemoteException, NotBoundException, MalformedURLException {
-        Room newRoom = app.createNewBotRoom();
-        return loadBoard(newRoom);
+    public IRoom createNewBotRoom(RealPlayer player) throws RemoteException, NotBoundException, MalformedURLException {
+        return app.createNewBotRoom(player);
     }
 
     private App connectToServer() throws NotBoundException, MalformedURLException, RemoteException {
         return (App) Naming.lookup(RMI_REGISTRY_ADDRESS + "/" + APP);
     }
 
-    public IBoard loadBoard(Room newRoom) {
-        String roomRMIAddress = RMI_REGISTRY_ADDRESS + "/" + ROOM + "/" + newRoom.getId().toString() + "/" + BOARD;
+    public IBoard loadBoard(IRoom newRoom) {
         try {
+            String roomRMIAddress = RMI_REGISTRY_ADDRESS + "/" + ROOM + "/" + newRoom.getId().toString() + "/" + BOARD;
             return (IBoard) Naming.lookup(roomRMIAddress);
         } catch (Exception e) {
             log.error("Error loading board", e);

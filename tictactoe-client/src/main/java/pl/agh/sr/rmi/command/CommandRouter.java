@@ -17,6 +17,8 @@ public class CommandRouter {
     static {
         commands.put(CreateNewRoomCommand.INVOCATION_PREFIX, CreateNewRoomCommand.DESCRIPTION);
         commands.put(PlayWithBotCommand.INVOCATION_PREFIX, PlayWithBotCommand.DESCRIPTION);
+        commands.put(ListRoomsCommand.INVOCATION_PREFIX, ListRoomsCommand.DESCRIPTION);
+        commands.put(JoinRoomCommand.INVOCATION_PREFIX, JoinRoomCommand.DESCRIPTION);
     }
 
     public CommandRouter(TicTacToeApp app, RmiClient rmiClient) {
@@ -29,6 +31,10 @@ public class CommandRouter {
             return new CreateNewRoomCommand(app, rmiClient);
         } else if (cmd.startsWith(PlayWithBotCommand.INVOCATION_PREFIX)) {
             return new PlayWithBotCommand(app, rmiClient);
+        } else if (cmd.startsWith(ListRoomsCommand.INVOCATION_PREFIX)) {
+            return new ListRoomsCommand(rmiClient);
+        } else if (cmd.startsWith(JoinRoomCommand.INVOCATION_PREFIX)) {
+            return new JoinRoomCommand(rmiClient, app, cmd);
         }
 
         System.out.println("No such command!");
@@ -37,7 +43,7 @@ public class CommandRouter {
 
     public static void printAvailableCommands() {
         for (String s : commands.keySet()) {
-            System.out.printf("%s - %s", s, commands.get(s));
+            System.out.printf("%s - %s\n", s, commands.get(s));
         }
     }
 }

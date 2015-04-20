@@ -19,9 +19,10 @@ public class TicTacToeServer {
     public static void main(String[] args) {
 
         try {
-//            if (System.getSecurityManager() == null) {
-//                System.setSecurityManager(new SecurityManager());
-//            }
+            System.setProperty("java.security.policy", "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-server/src/main/resources/server.policy");
+            if (System.getSecurityManager() == null) {
+                System.setSecurityManager(new SecurityManager());
+            }
 
 /*
             1. Create remote object

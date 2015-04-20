@@ -8,7 +8,17 @@ import java.rmi.RemoteException;
  */
 public interface IBoard extends Remote {
 
-    String sayHello() throws RemoteException;
-
+    /**
+     * Shows current state of Board.
+     * @return String representation of board state
+     * @throws RemoteException
+     */
     String show() throws RemoteException;
+
+    /**
+     * Marks field in current Board.
+     * @param fieldNo Field number.
+     * @throws RemoteException
+     */
+    void mark(int fieldNo) throws RemoteException;
 }

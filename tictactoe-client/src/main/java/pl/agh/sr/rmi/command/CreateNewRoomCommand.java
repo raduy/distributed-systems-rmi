@@ -2,7 +2,7 @@ package pl.agh.sr.rmi.command;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.agh.sr.rmi.IBoard;
+import pl.agh.sr.rmi.IRoom;
 import pl.agh.sr.rmi.RmiClient;
 import pl.agh.sr.rmi.TicTacToeApp;
 
@@ -24,9 +24,9 @@ public class CreateNewRoomCommand implements ICommand {
     @Override
     public void execute() {
         try {
-            IBoard newRoom = rmiClient.createNewRoom();
-            app.updateCurrentBoard(newRoom);
-            app.gameMode();
+            IRoom newRoom = rmiClient.createNewRoom(app.getPlayer());
+            app.gameMode(newRoom);
+            newRoom.markPlayerReady(app.getPlayer());
         } catch (Exception e) {
             log.error("Error execution command", e);
         }

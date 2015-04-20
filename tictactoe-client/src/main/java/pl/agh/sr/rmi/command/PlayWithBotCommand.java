@@ -2,7 +2,7 @@ package pl.agh.sr.rmi.command;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.agh.sr.rmi.IBoard;
+import pl.agh.sr.rmi.IRoom;
 import pl.agh.sr.rmi.RmiClient;
 import pl.agh.sr.rmi.TicTacToeApp;
 
@@ -25,9 +25,9 @@ public class PlayWithBotCommand implements ICommand {
     @Override
     public void execute() {
         try {
-            IBoard newRoom = rmiClient.createNewBotRoom();
-            app.updateCurrentBoard(newRoom);
-            app.gameMode();
+            IRoom newRoom = rmiClient.createNewBotRoom(app.getPlayer());
+//            app.gameMode(newRoom);
+//            rmiClient.markPlayerReady();
         } catch (Exception e) {
             log.error("Error execution command", e);
         }
