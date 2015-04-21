@@ -17,21 +17,28 @@ public class RoomImpl implements IRoom, Serializable {
     private static final Logger log = LoggerFactory.getLogger(RoomImpl.class);
 
     private final RoomId id;
-    private final IBoard board;
-    private Set<RealPlayer> players = new HashSet<RealPlayer>(2);
+    private final BoardImpl board;
+    private RealPlayer crossPlayer;
+    private RealPlayer circlePlayer;
+    private boolean isRoomReady;
 
-    public RoomImpl(IBoard board, RoomId roomId) {
+    public RoomImpl(BoardImpl board, RoomId roomId) {
         this.board = board;
         this.id = roomId;
     }
 
     @Override
     public void addPlayer(RealPlayer player) {
-        if (players.size() >= 2) {
+        if (circlePlayer != null && crossPlayer != null) {
             throw new RoomAlreadyFullException();
         }
 
-        players.add(player);
+        if (crossPlayer == null) {
+            crossPlayer = player;
+        } else {
+            circlePlayer = player;
+            isRoomReady = true;
+        }
     }
 
     @Override
@@ -49,28 +56,34 @@ public class RoomImpl implements IRoom, Serializable {
         player.markReady();
         log.debug("User {} ready!", player.getNickName());
 
-        if (players.size() != 2) {
+        if (!isRoomReady) {
             return;
         }
 
-        for (RealPlayer realPlayer : players) {
-            if (!realPlayer.isReady()) {
-                log.info("Player {} not ready yet. Waiting...", realPlayer);
-                return;
-            }
+        if (!circlePlayer.isReady() || !crossPlayer.isReady()) {
+            log.info("Players not ready yet. Waiting...");
+            return;
         }
 
         startGame();
     }
 
     private void startGame() throws RemoteException {
-        for (RealPlayer realPlayer : players) {
-            realPlayer.onGameStart();
-        }
+        crossPlayer.onGameStart();
+        circlePlayer.onGameStart();
+
+        board.beginGame(crossPlayer, circlePlayer);
     }
 
     @Override
     public Set<RealPlayer> players() throws RemoteException {
+        HashSet<RealPlayer> players = new HashSet<RealPlayer>();
+        if (circlePlayer != null) {
+            players.add(circlePlayer);
+        }
+        if (crossPlayer != null) {
+            players.add(crossPlayer);
+        }
         return players;
     }
 }

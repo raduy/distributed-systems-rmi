@@ -30,7 +30,7 @@ public class JoinRoomCommand implements ICommand {
         String roomIdPrefix = prepareRoomIdPrefix();
 
         App app = rmiClient.getApp();
-        RealPlayer player = ticTacToeApp.getRemotePlayer();
+        RealPlayer player = ticTacToeApp.getPlayer();
 
         try {
             Set<IRoom> rooms = app.listRooms();
@@ -39,7 +39,6 @@ public class JoinRoomCommand implements ICommand {
                 if (isRoomIdMatching(roomIdPrefix, room)) {
                     app.joinRoom(room.getId(), player);
                     ticTacToeApp.gameMode(room);
-                    player.markReady();
                     room.markPlayerReady(player);
                     return;
                 }

@@ -1,7 +1,9 @@
 package pl.agh.sr.rmi.player;
 
+import pl.agh.sr.rmi.GameResult;
 import pl.agh.sr.rmi.RealPlayer;
 import pl.agh.sr.rmi.TicTacToeApp;
+import pl.agh.sr.rmi.command.CommandRouter;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -28,6 +30,33 @@ public class RealPlayerImpl implements RealPlayer, Serializable {
     @Override
     public void onGameStart() throws RemoteException {
         ticTacToeApp.startGame();
+    }
+
+    @Override
+    public void onBoardUpdated() throws RemoteException {
+        ticTacToeApp.printBoard();
+    }
+
+    @Override
+    public void onWin() throws RemoteException {
+        afterGameEnd(GameResult.WIN);
+    }
+
+    @Override
+    public void onLoose() throws RemoteException {
+        afterGameEnd(GameResult.LOST);
+    }
+
+    @Override
+    public void onDraw() throws RemoteException {
+        afterGameEnd(GameResult.DRAW);
+    }
+
+    private void afterGameEnd(GameResult gameResult) {
+        System.out.println(gameResult.getMessage());
+        System.out.println("Choose what to do next");
+        CommandRouter.printAvailableCommands();
+        ticTacToeApp.commandMode();
     }
 
     @Override

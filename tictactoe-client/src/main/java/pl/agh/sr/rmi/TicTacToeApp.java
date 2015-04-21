@@ -49,7 +49,8 @@ public class TicTacToeApp {
             this.rmiClient = new RmiClient(this);
             this.commandRouter = new CommandRouter(this, rmiClient);
 
-            this.player = new RealPlayerImpl(readNickName(), this);
+            RealPlayerImpl realPlayer = new RealPlayerImpl(readNickName(), this);
+            this.player = (RealPlayer) UnicastRemoteObject.exportObject(realPlayer, 0);
 
             CommandRouter.printAvailableCommands();
             commandMode();
@@ -62,15 +63,6 @@ public class TicTacToeApp {
 
     public RealPlayer getPlayer() {
         return player;
-    }
-
-    public RealPlayer getRemotePlayer() {
-        try {
-            return (RealPlayer) UnicastRemoteObject.exportObject(getPlayer(), 0);
-        } catch (RemoteException e) {
-            log.error("Error", e);
-        }
-        return null;
     }
 
     private String readNickName() {
@@ -89,27 +81,26 @@ public class TicTacToeApp {
     }
 
     public void commandMode() {
-        while (!Thread.interrupted()) {
             String cmd = scanner.nextLine();
             if (cmd.isEmpty()) {
-                continue;
+                commandMode(); //todo fix
             }
             ICommand command = commandRouter.route(cmd);
             command.execute();
-        }
     }
 
     public void gameMode(IRoom newRoom) {
         this.currentRoom = newRoom;
-        System.out.println("gaming...");
+        System.out.println("Waiting for second player...");
     }
 
     public void readMove() {
         System.out.println("Your turn!");
-        int fieldNo = scanner.nextInt();
+        int fieldNo = Integer.parseInt(new Scanner(System.in).nextLine());
+        System.out.printf("You have chosen %d\n", fieldNo);
 
         try {
-            currentBoard.mark(fieldNo);
+            currentBoard.mark(fieldNo, player);
         } catch (RemoteException e) {
             log.error("Error", e);
         }
@@ -120,10 +111,14 @@ public class TicTacToeApp {
         try {
             this.currentBoard = rmiClient.loadBoard(currentRoom);
 
-            System.out.println(currentBoard.show());
+            printBoard();
         } catch (Exception e) {
             log.error("Error", e);
         }
+    }
+
+    public void printBoard() throws RemoteException {
+        System.out.println(currentBoard.show());
     }
 
     private static void printInvitation() {

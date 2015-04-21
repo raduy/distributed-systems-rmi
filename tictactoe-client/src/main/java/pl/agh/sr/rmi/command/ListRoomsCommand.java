@@ -1,9 +1,6 @@
 package pl.agh.sr.rmi.command;
 
-import pl.agh.sr.rmi.App;
-import pl.agh.sr.rmi.IRoom;
-import pl.agh.sr.rmi.RealPlayer;
-import pl.agh.sr.rmi.RmiClient;
+import pl.agh.sr.rmi.*;
 
 import java.rmi.RemoteException;
 import java.util.Set;
@@ -15,9 +12,11 @@ public class ListRoomsCommand implements ICommand {
     public static final String INVOCATION_PREFIX = "-l";
     public static final String DESCRIPTION = "Lists all existing rooms";
     private RmiClient rmiClient;
+    private TicTacToeApp ticTacToeApp;
 
-    public ListRoomsCommand(RmiClient rmiClient) {
+    public ListRoomsCommand(RmiClient rmiClient, TicTacToeApp ticTacToeApp) {
         this.rmiClient = rmiClient;
+        this.ticTacToeApp = ticTacToeApp;
     }
 
     @Override
@@ -30,6 +29,8 @@ public class ListRoomsCommand implements ICommand {
                 System.out.printf("Room of id: %s with players:\n", room.getId());
                 printPlayers(room);
             }
+
+            ticTacToeApp.commandMode();
         } catch (RemoteException e) {
             e.printStackTrace();
         }

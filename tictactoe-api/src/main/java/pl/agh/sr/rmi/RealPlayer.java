@@ -19,4 +19,11 @@ public interface RealPlayer extends Remote, Serializable {
 
     void onGameStart() throws RemoteException;
 
+    void onBoardUpdated() throws RemoteException;
+
+    void onWin() throws RemoteException;
+
+    void onLoose() throws RemoteException;
+
+    void onDraw() throws RemoteException;
 }

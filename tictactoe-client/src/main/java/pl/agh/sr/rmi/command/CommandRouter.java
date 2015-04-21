@@ -32,7 +32,7 @@ public class CommandRouter {
         } else if (cmd.startsWith(PlayWithBotCommand.INVOCATION_PREFIX)) {
             return new PlayWithBotCommand(app, rmiClient);
         } else if (cmd.startsWith(ListRoomsCommand.INVOCATION_PREFIX)) {
-            return new ListRoomsCommand(rmiClient);
+            return new ListRoomsCommand(rmiClient, app);
         } else if (cmd.startsWith(JoinRoomCommand.INVOCATION_PREFIX)) {
             return new JoinRoomCommand(rmiClient, app, cmd);
         }
