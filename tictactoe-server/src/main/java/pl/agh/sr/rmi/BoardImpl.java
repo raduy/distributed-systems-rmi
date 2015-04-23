@@ -13,14 +13,12 @@ import java.util.Random;
 public class BoardImpl implements IBoard {
     private static final Logger log = LoggerFactory.getLogger(BoardImpl.class);
 
-    private static final int BOARD_SIZE = 3;
+    public static final int BOARD_SIZE = 3;
     private RealPlayer crossPlayer;
     private RealPlayer circlePlayer;
     private RealPlayer nextMovePlayer;
     private Sign nextMoveSign;
     private int doneMovesCounter;
-
-
 
     public void beginGame(RealPlayer crossPlayer, RealPlayer circlePlayer) throws RemoteException {
         this.crossPlayer = crossPlayer;
@@ -76,11 +74,11 @@ public class BoardImpl implements IBoard {
 
         int index = 0;
         for (Sign[] Signs : board) {
-            for (Sign Sign : Signs) {
-                if (Sign.NONE.equals(Sign)) {
+            for (Sign sign : Signs) {
+                if (Sign.NONE.equals(sign)) {
                     builder.append(fieldNumbers[index]);
                 } else {
-                    builder.append(Sign);
+                    builder.append(sign);
                 }
                 builder.append(" ");
                 index++;
@@ -178,7 +176,6 @@ public class BoardImpl implements IBoard {
                 sum += board[j][i].value();
             }
 
-            System.out.println(sum);
             if (isWinningLine(sum)) {
                 return true;
             }

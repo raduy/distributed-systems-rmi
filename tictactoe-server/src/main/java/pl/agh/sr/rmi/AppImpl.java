@@ -2,6 +2,7 @@ package pl.agh.sr.rmi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.agh.sr.rmi.bot.RandomMoveBotLogic;
 import pl.agh.sr.rmi.room.RoomImpl;
 
 import java.net.MalformedURLException;
@@ -53,9 +54,10 @@ public class AppImpl implements App {
     public IRoom createNewBotRoom(RealPlayer player) throws RemoteException {
         IRoom newRoom = createNewRoom(player);
 
-//        Bot bot = new Bot(UUID.randomUUID().toString());
-//        newRoom.addPlayer(bot);
+        Bot bot = new Bot(newRoom.board(), new RandomMoveBotLogic());
+        newRoom.addPlayer(bot);
 
+        log.debug("Bot's room created");
         return newRoom;
     }
 

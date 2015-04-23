@@ -21,7 +21,7 @@ public class RmiClient {
     private static final String APP = "app";
 
     private App app;
-    private TicTacToeApp ticTacToeApp;
+    private final TicTacToeApp ticTacToeApp;
 
     public RmiClient(TicTacToeApp ticTacToeApp) {
         System.setProperty("java.security.policy",
@@ -58,7 +58,9 @@ public class RmiClient {
 
     public IBoard loadBoard(IRoom newRoom) {
         try {
-            String roomRMIAddress = RMI_REGISTRY_ADDRESS + "/" + ROOM + "/" + newRoom.getId().toString() + "/" + BOARD;
+            String roomId = newRoom.getId().toString();
+            String roomRMIAddress = RMI_REGISTRY_ADDRESS + "/" + ROOM + "/" + roomId + "/" + BOARD;
+
             return (IBoard) Naming.lookup(roomRMIAddress);
         } catch (Exception e) {
             log.error("Error loading board", e);

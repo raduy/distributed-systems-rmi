@@ -34,6 +34,7 @@ public class RealPlayerImpl implements RealPlayer, Serializable {
 
     @Override
     public void onBoardUpdated() throws RemoteException {
+        System.out.println("Move registered! Board updated!");
         ticTacToeApp.printBoard();
     }
 

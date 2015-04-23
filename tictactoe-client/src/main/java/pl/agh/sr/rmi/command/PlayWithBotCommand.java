@@ -14,7 +14,7 @@ public class PlayWithBotCommand implements ICommand {
 
     public static final String INVOCATION_PREFIX = "-b";
     public static final String DESCRIPTION = "Creates a new room with bot";
-    private TicTacToeApp app;
+    private final TicTacToeApp app;
     private final RmiClient rmiClient;
 
     public PlayWithBotCommand(TicTacToeApp app, RmiClient rmiClient) {
@@ -26,8 +26,8 @@ public class PlayWithBotCommand implements ICommand {
     public void execute() {
         try {
             IRoom newRoom = rmiClient.createNewBotRoom(app.getPlayer());
-//            app.gameMode(newRoom);
-//            rmiClient.markPlayerReady();
+            app.gameMode(newRoom);
+            newRoom.markPlayerReady(app.getPlayer());
         } catch (Exception e) {
             log.error("Error execution command", e);
         }

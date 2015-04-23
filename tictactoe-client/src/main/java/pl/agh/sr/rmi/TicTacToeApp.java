@@ -75,11 +75,6 @@ public class TicTacToeApp {
         return nickName;
     }
 
-
-    public void updateCurrentBoard(IBoard newBoard) {
-        this.currentBoard = newBoard;
-    }
-
     public void commandMode() {
             String cmd = scanner.nextLine();
             if (cmd.isEmpty()) {
@@ -96,7 +91,7 @@ public class TicTacToeApp {
 
     public void readMove() {
         System.out.println("Your turn!");
-        int fieldNo = Integer.parseInt(new Scanner(System.in).nextLine());
+        int fieldNo = Integer.parseInt(scanner.nextLine());
         System.out.printf("You have chosen %d\n", fieldNo);
 
         try {
