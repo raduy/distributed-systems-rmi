@@ -30,7 +30,7 @@ public class JoinRoomCommand implements ICommand {
         String roomIdPrefix = prepareRoomIdPrefix();
 
         App app = rmiClient.getApp();
-        RealPlayer player = ticTacToeApp.getPlayer();
+        IPlayer player = ticTacToeApp.getPlayer();
 
         try {
             Set<IRoom> rooms = app.listRooms();

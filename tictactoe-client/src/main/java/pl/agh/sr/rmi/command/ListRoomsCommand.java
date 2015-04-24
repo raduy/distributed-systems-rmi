@@ -37,7 +37,7 @@ public class ListRoomsCommand implements ICommand {
     }
 
     private void printPlayers(IRoom room) throws RemoteException {
-        for (RealPlayer player : room.players()) {
+        for (IPlayer player : room.players()) {
             System.out.printf("\t%s\n", player.getNickName());
         }
     }

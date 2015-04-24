@@ -21,7 +21,7 @@ public interface App extends Remote {
      * @return Newly created room.
      * @throws RemoteException
      */
-    IRoom createNewRoom(RealPlayer player) throws RemoteException;
+    IRoom createNewRoom(IPlayer player) throws RemoteException;
 
     /**
      * Creates new room for a game with bot.
@@ -29,12 +29,12 @@ public interface App extends Remote {
      * @return Newly created room.
      * @throws RemoteException
      */
-    IRoom createNewBotRoom(RealPlayer player) throws RemoteException;
+    IRoom createNewBotRoom(IPlayer player) throws RemoteException;
 
     /**
      * @param roomId id of existing room.
      *               Creates new room if not exists!
      * @throws RemoteException
      */
-    void joinRoom(RoomId roomId, RealPlayer player) throws RemoteException;
+    void joinRoom(RoomId roomId, IPlayer player) throws RemoteException;
 }

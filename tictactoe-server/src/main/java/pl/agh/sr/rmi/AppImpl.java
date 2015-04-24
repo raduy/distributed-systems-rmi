@@ -27,7 +27,7 @@ public class AppImpl implements App {
     }
 
     @Override
-    public IRoom createNewRoom(RealPlayer player) throws RemoteException {
+    public IRoom createNewRoom(IPlayer player) throws RemoteException {
         log.debug("Creating new room...");
 
         BoardImpl board = new BoardImpl();
@@ -51,7 +51,7 @@ public class AppImpl implements App {
     }
 
     @Override
-    public IRoom createNewBotRoom(RealPlayer player) throws RemoteException {
+    public IRoom createNewBotRoom(IPlayer player) throws RemoteException {
         IRoom newRoom = createNewRoom(player);
 
         Bot bot = new Bot(newRoom.board(), new RandomMoveBotLogic());
@@ -62,7 +62,7 @@ public class AppImpl implements App {
     }
 
     @Override
-    public void joinRoom(RoomId roomId, RealPlayer player) throws RemoteException {
+    public void joinRoom(RoomId roomId, IPlayer player) throws RemoteException {
         IRoom room = roomsRepository.load(roomId);
         room.addPlayer(player);
 

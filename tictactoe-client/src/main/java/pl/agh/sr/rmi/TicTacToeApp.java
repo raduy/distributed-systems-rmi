@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.agh.sr.rmi.command.CommandRouter;
 import pl.agh.sr.rmi.command.ICommand;
-import pl.agh.sr.rmi.player.RealPlayerImpl;
+import pl.agh.sr.rmi.player.RealPlayer;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -21,7 +21,7 @@ public class TicTacToeApp {
     private IBoard currentBoard;
     private CommandRouter commandRouter;
     private RmiClient rmiClient;
-    private RealPlayer player;
+    private IPlayer player;
     private IRoom currentRoom;
 
     public static void main(String[] args) {
@@ -49,8 +49,8 @@ public class TicTacToeApp {
             this.rmiClient = new RmiClient(this);
             this.commandRouter = new CommandRouter(this, rmiClient);
 
-            RealPlayerImpl realPlayer = new RealPlayerImpl(readNickName(), this);
-            this.player = (RealPlayer) UnicastRemoteObject.exportObject(realPlayer, 0);
+            RealPlayer realPlayer = new RealPlayer(readNickName(), this);
+            this.player = (IPlayer) UnicastRemoteObject.exportObject(realPlayer, 0);
 
             CommandRouter.printAvailableCommands();
             commandMode();
@@ -61,7 +61,7 @@ public class TicTacToeApp {
         }
     }
 
-    public RealPlayer getPlayer() {
+    public IPlayer getPlayer() {
         return player;
     }
 
@@ -91,13 +91,17 @@ public class TicTacToeApp {
 
     public void readMove() {
         System.out.println("Your turn!");
-        int fieldNo = Integer.parseInt(scanner.nextLine());
-        System.out.printf("You have chosen %d\n", fieldNo);
 
-        try {
-            currentBoard.mark(fieldNo, player);
-        } catch (RemoteException e) {
-            log.error("Error", e);
+        while (!Thread.interrupted()) {
+            try {
+                int fieldNo = Integer.parseInt(scanner.nextLine());
+                System.out.printf("You have chosen %d\n", fieldNo);
+                currentBoard.mark(fieldNo, player);
+            } catch (RemoteException e) {
+                System.out.println("Hey you, this field is already marked! Pick sth else");
+            } catch (Exception e) {
+                //retry
+            }
         }
     }
 

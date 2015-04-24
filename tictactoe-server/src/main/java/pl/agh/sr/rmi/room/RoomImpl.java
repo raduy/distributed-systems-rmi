@@ -18,8 +18,8 @@ public class RoomImpl implements IRoom, Serializable {
 
     private final RoomId id;
     private final BoardImpl board;
-    private RealPlayer crossPlayer;
-    private RealPlayer circlePlayer;
+    private IPlayer crossPlayer;
+    private IPlayer circlePlayer;
     private boolean isRoomReady;
 
     public RoomImpl(BoardImpl board, RoomId roomId) {
@@ -28,7 +28,7 @@ public class RoomImpl implements IRoom, Serializable {
     }
 
     @Override
-    public void addPlayer(RealPlayer player) {
+    public void addPlayer(IPlayer player) {
         if (circlePlayer != null && crossPlayer != null) {
             throw new RoomAlreadyFullException();
         }
@@ -52,7 +52,7 @@ public class RoomImpl implements IRoom, Serializable {
     }
 
     @Override
-    public void markPlayerReady(RealPlayer player) throws RemoteException {
+    public void markPlayerReady(IPlayer player) throws RemoteException {
         player.markReady();
         log.debug("User {} ready!", player.getNickName());
 
@@ -76,8 +76,8 @@ public class RoomImpl implements IRoom, Serializable {
     }
 
     @Override
-    public Set<RealPlayer> players() throws RemoteException {
-        HashSet<RealPlayer> players = new HashSet<RealPlayer>();
+    public Set<IPlayer> players() throws RemoteException {
+        Set<IPlayer> players = new HashSet<IPlayer>();
         if (circlePlayer != null) {
             players.add(circlePlayer);
         }

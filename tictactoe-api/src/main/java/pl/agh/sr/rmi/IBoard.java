@@ -20,6 +20,6 @@ public interface IBoard extends Remote {
      * @param fieldNo Field number.
      * @throws RemoteException
      */
-    void mark(int fieldNo, RealPlayer player) throws RemoteException;
+    void mark(int fieldNo, IPlayer player) throws RemoteException;
 
 }

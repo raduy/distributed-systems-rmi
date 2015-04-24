@@ -14,13 +14,13 @@ public class BoardImpl implements IBoard {
     private static final Logger log = LoggerFactory.getLogger(BoardImpl.class);
 
     public static final int BOARD_SIZE = 3;
-    private RealPlayer crossPlayer;
-    private RealPlayer circlePlayer;
-    private RealPlayer nextMovePlayer;
+    private IPlayer crossPlayer;
+    private IPlayer circlePlayer;
+    private IPlayer nextMovePlayer;
     private Sign nextMoveSign;
     private int doneMovesCounter;
 
-    public void beginGame(RealPlayer crossPlayer, RealPlayer circlePlayer) throws RemoteException {
+    public void beginGame(IPlayer crossPlayer, IPlayer circlePlayer) throws RemoteException {
         this.crossPlayer = crossPlayer;
         this.circlePlayer = circlePlayer;
 
@@ -90,7 +90,7 @@ public class BoardImpl implements IBoard {
     }
 
     @Override
-    public void mark(int fieldNo, RealPlayer player) throws RemoteException {
+    public void mark(int fieldNo, IPlayer player) throws RemoteException {
 //        if (nextMovePlayer != player) {
 //            return; //nice try
 //        }

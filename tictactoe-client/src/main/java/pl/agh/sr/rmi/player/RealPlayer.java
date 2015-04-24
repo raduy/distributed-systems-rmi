@@ -1,7 +1,7 @@
 package pl.agh.sr.rmi.player;
 
 import pl.agh.sr.rmi.GameResult;
-import pl.agh.sr.rmi.RealPlayer;
+import pl.agh.sr.rmi.IPlayer;
 import pl.agh.sr.rmi.TicTacToeApp;
 import pl.agh.sr.rmi.command.CommandRouter;
 
@@ -11,13 +11,13 @@ import java.rmi.RemoteException;
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
-public class RealPlayerImpl implements RealPlayer, Serializable {
+public class RealPlayer implements IPlayer, Serializable {
 
     private final String nickName;
     private boolean isReady;
     private transient final TicTacToeApp ticTacToeApp;
 
-    public RealPlayerImpl(String nickName, TicTacToeApp ticTacToeApp) {
+    public RealPlayer(String nickName, TicTacToeApp ticTacToeApp) {
         this.nickName = nickName;
         this.ticTacToeApp = ticTacToeApp;
     }

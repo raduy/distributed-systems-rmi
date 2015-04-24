@@ -43,12 +43,12 @@ public class RmiClient {
         return app;
     }
 
-    public IRoom createNewRoom(RealPlayer player) throws RemoteException, NotBoundException, MalformedURLException {
-        RealPlayer stub = (RealPlayer) UnicastRemoteObject.exportObject(player, 0);
+    public IRoom createNewRoom(IPlayer player) throws RemoteException, NotBoundException, MalformedURLException {
+        IPlayer stub = (IPlayer) UnicastRemoteObject.exportObject(player, 0);
         return app.createNewRoom(stub);
     }
 
-    public IRoom createNewBotRoom(RealPlayer player) throws RemoteException, NotBoundException, MalformedURLException {
+    public IRoom createNewBotRoom(IPlayer player) throws RemoteException, NotBoundException, MalformedURLException {
         return app.createNewBotRoom(player);
     }
 

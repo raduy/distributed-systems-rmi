@@ -18,13 +18,13 @@ public interface IRoom extends Remote {
      * @param player
      * @throws RemoteException
      */
-    void markPlayerReady(RealPlayer player) throws RemoteException;
+    void markPlayerReady(IPlayer player) throws RemoteException;
 
     /**
      *
      * @return Returns players in this Room
      */
-    Set<RealPlayer> players() throws RemoteException;
+    Set<IPlayer> players() throws RemoteException;
 
-    void addPlayer(RealPlayer player) throws RemoteException;
+    void addPlayer(IPlayer player) throws RemoteException;
 }

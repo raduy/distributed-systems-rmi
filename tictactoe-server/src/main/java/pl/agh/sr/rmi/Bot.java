@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
-public class Bot implements RealPlayer {
+public class Bot implements IPlayer {
 
     private final String nickName = generateNickName();
     private final IBoard board;

@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
-public interface RealPlayer extends Remote, Serializable {
+public interface IPlayer extends Remote, Serializable {
 
     String getNickName() throws RemoteException;
 
