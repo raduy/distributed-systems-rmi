@@ -144,7 +144,7 @@ public class BoardImpl implements IBoard {
         int right = 0;
         for (int i = 0; i < length; i++) {
             left += board[i][i].value();
-            right += board[length - i - 1][length - i - 1].value();
+            right += board[i][length - i - 1].value();
         }
 
         return isWinningLine(left) || isWinningLine(right);

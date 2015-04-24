@@ -10,13 +10,16 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
+import static pl.agh.sr.rmi.Config.*;
+
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
 public class TicTacToeApp {
-
     private static final Logger log = LoggerFactory.getLogger(TicTacToeApp.class);
 
+    private final String rmiIp;
+    private final int rmiPort;
     private final Scanner scanner = new Scanner(System.in);
     private IBoard currentBoard;
     private CommandRouter commandRouter;
@@ -24,29 +27,40 @@ public class TicTacToeApp {
     private IPlayer player;
     private IRoom currentRoom;
 
+    public TicTacToeApp(String rmiIp, int rmiPort) {
+        this.rmiIp = rmiIp;
+        this.rmiPort = rmiPort;
+    }
+
     public static void main(String[] args) {
 
-        TicTacToeApp ticTacToeApp = new TicTacToeApp();
+        String rmiIp = DEFAULT_RMI_REGISTRY_IP;
+        int rmiPort = DEFAULT_RMI_REGISTRY_PORT;
+
+        try {
+            if (args.length < 2) {
+                System.out.println("Usage: java TicTacToeApp <ip> <port>");
+                System.out.println("Loading default ip and port...");
+            } else {
+                rmiIp = args[0];
+                rmiPort = Integer.parseInt(args[1]);
+            }
+        } catch (Exception e) {
+            System.out.println("Wrongs args given!");
+            System.out.println("Loading default ip and port");
+            rmiIp = DEFAULT_RMI_REGISTRY_IP;
+            rmiPort = DEFAULT_RMI_REGISTRY_PORT;
+        }
+
+        TicTacToeApp ticTacToeApp = new TicTacToeApp(rmiIp, rmiPort);
         ticTacToeApp.play();
     }
 
     private void play() {
         try {
-
-/*
-            1. Look for remote reference (in RMI Registry)
-*/
-//            IBoard board = (IBoard) Naming.lookup(RMI_REGISTRY_ADDRESS + "/" + BOARD_REMOTE_OBJECT_NAME);
-/*
-            2. Call remote method
-*/
-//            System.out.println(board.sayHello());
-
-//            ------------------------------
-
             printInvitation();
 
-            this.rmiClient = new RmiClient(this);
+            this.rmiClient = new RmiClient(rmiIp, rmiPort);
             this.commandRouter = new CommandRouter(this, rmiClient);
 
             RealPlayer realPlayer = new RealPlayer(readNickName(), this);
@@ -68,7 +82,7 @@ public class TicTacToeApp {
     private String readNickName() {
         System.out.println("What's your name dude?");
         String nickName = null;
-        while(nickName == null || nickName.isEmpty()) {
+        while (nickName == null || nickName.isEmpty()) {
             nickName = scanner.nextLine();
         }
 
@@ -76,12 +90,12 @@ public class TicTacToeApp {
     }
 
     public void commandMode() {
-            String cmd = scanner.nextLine();
-            if (cmd.isEmpty()) {
-                commandMode(); //todo fix
-            }
-            ICommand command = commandRouter.route(cmd);
-            command.execute();
+        String cmd = scanner.nextLine();
+        if (cmd.isEmpty()) {
+            commandMode(); //todo fix
+        }
+        ICommand command = commandRouter.route(cmd);
+        command.execute();
     }
 
     public void gameMode(IRoom newRoom) {

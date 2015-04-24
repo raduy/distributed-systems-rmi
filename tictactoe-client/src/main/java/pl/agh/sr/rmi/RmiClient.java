@@ -9,33 +9,44 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import static pl.agh.sr.rmi.Config.*;
+
 /**
  * @author Lukasz Raduj <raduj.lukasz@gmail.com>
  */
 public class RmiClient {
     private static final Logger log = LoggerFactory.getLogger(RmiClient.class);
 
-    private static final String RMI_REGISTRY_ADDRESS = "rmi://127.0.0.1:1099";
-    private static final String BOARD = "board";
-    private static final String ROOM = "room";
-    private static final String APP = "app";
-
+    private final String rmiRegistryAddress;
     private App app;
-    private final TicTacToeApp ticTacToeApp;
 
-    public RmiClient(TicTacToeApp ticTacToeApp) {
-        System.setProperty("java.security.policy",
-                "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/src/main/resources/client.policy");
+    public RmiClient(String rmiIp, int rmiPort) {
+        this.rmiRegistryAddress = buildRbiRegistryAddress(rmiIp, rmiPort);
+
+        setupSecurityManager();
+        connectToServer();
+    }
+
+    private String buildRbiRegistryAddress(String rmiIp, int rmiPort) {
+        return String.format(RMI_ADDRESS_FORMAT, rmiIp, rmiPort);
+    }
+
+    private void connectToServer() {
+        try {
+            this.app = (App) Naming.lookup(rmiRegistryAddress + "/" + APP);
+        } catch (Exception e) {
+            log.error("Error connecting to server", e);
+        }
+    }
+
+    private void setupSecurityManager() {
+        if (System.getProperty("java.security.policy") == null) {
+            System.setProperty("java.security.policy",
+                    "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/src/main/resources/client.policy");
+        }
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
-        }
-
-        this.ticTacToeApp = ticTacToeApp;
-        try {
-            this.app = connectToServer();
-        } catch (Exception e) {
-            log.error("Error connecting to server", e);
         }
     }
 
@@ -52,14 +63,10 @@ public class RmiClient {
         return app.createNewBotRoom(player);
     }
 
-    private App connectToServer() throws NotBoundException, MalformedURLException, RemoteException {
-        return (App) Naming.lookup(RMI_REGISTRY_ADDRESS + "/" + APP);
-    }
-
     public IBoard loadBoard(IRoom newRoom) {
         try {
             String roomId = newRoom.getId().toString();
-            String roomRMIAddress = RMI_REGISTRY_ADDRESS + "/" + ROOM + "/" + roomId + "/" + BOARD;
+            String roomRMIAddress = rmiRegistryAddress + "/" + ROOM + "/" + roomId + "/" + BOARD;
 
             return (IBoard) Naming.lookup(roomRMIAddress);
         } catch (Exception e) {
