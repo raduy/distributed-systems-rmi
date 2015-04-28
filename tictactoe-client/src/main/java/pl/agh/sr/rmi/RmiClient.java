@@ -41,8 +41,11 @@ public class RmiClient {
 
     private void setupSecurityManager() {
         if (System.getProperty("java.security.policy") == null) {
-            System.setProperty("java.security.policy",
-                    "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/target/classes/client.policy");
+            System.out.println("!!! Please set location of security policy file! Do it with: -Djava.security.policy=path/to/client/policy/file/client.policy");
+
+            System.out.println("Loading very poor default...");
+            String poorDefault = "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/target/classes/client.policy";
+            System.setProperty("java.security.policy", poorDefault);
         }
 
         if (System.getSecurityManager() == null) {

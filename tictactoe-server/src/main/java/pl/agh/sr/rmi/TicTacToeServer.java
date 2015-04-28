@@ -97,8 +97,11 @@ public class TicTacToeServer {
 
     private static void setupSecurityManager() {
         if (System.getProperty("java.security.policy") == null) {
-            String defaultValue = "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-server/src/main/resources/server.policy";
-            System.setProperty("java.security.policy", defaultValue);
+            System.out.println("!!! Please set location of security policy file! Do it with: -Djava.security.policy=path/to/server/policy/file/server.policy");
+
+            System.out.println("Loading very poor default...");
+            String poorDefault = "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-server/src/main/resources/server.policy";
+            System.setProperty("java.security.policy", poorDefault);
         }
 
         if (System.getSecurityManager() == null) {

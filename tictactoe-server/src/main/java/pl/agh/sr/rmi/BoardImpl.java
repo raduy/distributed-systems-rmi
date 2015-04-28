@@ -100,7 +100,7 @@ public class BoardImpl implements IBoard {
         int xPos = fieldNo / BOARD_SIZE;
 
         if (!Sign.NONE.equals(board[xPos][yPos])) {
-            throw new IllegalArgumentException("Field now allow exception");
+            throw new RemoteException("Field now allowed exception!");
         }
 
         board[xPos][yPos] = nextMoveSign;
