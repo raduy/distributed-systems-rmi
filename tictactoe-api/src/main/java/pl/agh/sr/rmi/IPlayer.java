@@ -17,7 +17,7 @@ public interface IPlayer extends Remote, Serializable {
 
     void onMove() throws RemoteException;
 
-    void onGameStart() throws RemoteException;
+    void onGameStart(Sign sign) throws RemoteException;
 
     void onBoardUpdated() throws RemoteException;
 

@@ -26,6 +26,7 @@ public class TicTacToeApp {
     private RmiClient rmiClient;
     private IPlayer player;
     private IRoom currentRoom;
+    private Sign sign;
 
     public TicTacToeApp(String rmiIp, int rmiPort) {
         this.rmiIp = rmiIp;
@@ -104,7 +105,7 @@ public class TicTacToeApp {
     }
 
     public void readMove() {
-        System.out.println("Your turn!");
+        System.out.printf("Your turn! You have: %s\n", sign.name());
 
         while (!Thread.interrupted()) {
             try {
@@ -119,7 +120,9 @@ public class TicTacToeApp {
         }
     }
 
-    public void startGame() throws RemoteException {
+    public void startGame(Sign sign) throws RemoteException {
+        this.sign = sign;
+
         System.out.println("Game is starting!");
         try {
             this.currentBoard = rmiClient.loadBoard(currentRoom);

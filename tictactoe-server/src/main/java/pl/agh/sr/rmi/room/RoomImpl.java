@@ -69,9 +69,6 @@ public class RoomImpl implements IRoom, Serializable {
     }
 
     private void startGame() throws RemoteException {
-        crossPlayer.onGameStart();
-        circlePlayer.onGameStart();
-
         board.beginGame(crossPlayer, circlePlayer);
     }
 

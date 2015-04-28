@@ -2,7 +2,6 @@ package pl.agh.sr.rmi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.agh.sr.rmi.board.Sign;
 
 import java.rmi.RemoteException;
 import java.util.Random;
@@ -24,6 +23,9 @@ public class BoardImpl implements IBoard {
         this.crossPlayer = crossPlayer;
         this.circlePlayer = circlePlayer;
 
+        crossPlayer.onGameStart(Sign.X);
+        circlePlayer.onGameStart(Sign.O);
+
         drawNextMovePlayer();
         nextMovePlayer.onMove();
     }
@@ -31,8 +33,6 @@ public class BoardImpl implements IBoard {
     private void drawNextMovePlayer() throws RemoteException {
         Random random = new Random(System.currentTimeMillis());
         boolean circleStarts = random.nextBoolean();
-
-        nextMovePlayer = circleStarts ? circlePlayer : crossPlayer;
 
         if (circleStarts) {
             nextMovePlayer = circlePlayer;

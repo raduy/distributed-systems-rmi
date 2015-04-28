@@ -42,7 +42,7 @@ public class RmiClient {
     private void setupSecurityManager() {
         if (System.getProperty("java.security.policy") == null) {
             System.setProperty("java.security.policy",
-                    "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/src/main/resources/client.policy");
+                    "/home/raduy/Dropbox/Development/IdeaProjects/distributed-systems-rmi/tictactoe-client/target/classes/client.policy");
         }
 
         if (System.getSecurityManager() == null) {

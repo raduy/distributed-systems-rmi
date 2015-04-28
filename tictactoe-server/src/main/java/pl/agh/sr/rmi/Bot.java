@@ -53,7 +53,7 @@ public class Bot implements IPlayer {
     }
 
     @Override
-    public void onGameStart() throws RemoteException {
+    public void onGameStart(Sign sign) throws RemoteException {
         //pass
     }
 

@@ -2,6 +2,7 @@ package pl.agh.sr.rmi.player;
 
 import pl.agh.sr.rmi.GameResult;
 import pl.agh.sr.rmi.IPlayer;
+import pl.agh.sr.rmi.Sign;
 import pl.agh.sr.rmi.TicTacToeApp;
 import pl.agh.sr.rmi.command.CommandRouter;
 
@@ -28,8 +29,8 @@ public class RealPlayer implements IPlayer, Serializable {
     }
 
     @Override
-    public void onGameStart() throws RemoteException {
-        ticTacToeApp.startGame();
+    public void onGameStart(Sign sign) throws RemoteException {
+        ticTacToeApp.startGame(sign);
     }
 
     @Override
